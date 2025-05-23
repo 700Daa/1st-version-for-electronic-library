@@ -35,9 +35,9 @@ class LibrarySystem
         Choice(yourChoice);
     }
 
-    
-    
-    
+
+
+
 
     static void WelcomeScreen()
     {
@@ -99,7 +99,7 @@ class LibrarySystem
         else if (choice == 2145879541)
         {
             Admin();
-        }    
+        }
     }
 
     static void SignIn()
@@ -180,7 +180,7 @@ class LibrarySystem
 
                             }
                         } while (forgetPassword != 1 && forgetPassword != 0);
-                    
+
                     }
                 }
             }
@@ -250,7 +250,7 @@ class LibrarySystem
         Console.WriteLine("2. Delete a user");
         Console.WriteLine("3. Exit to main menu");
         bool choicebo;
-        int choicein ;
+        int choicein;
         do
         {
             string choice = Console.ReadLine();
