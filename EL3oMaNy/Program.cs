@@ -1,7 +1,9 @@
-﻿using System;
-using System.Threading;
+using System;
 using System.Collections.Generic;
-using System.IO;
+using System.IO; 
+using System.Linq;
+using System.Threading;
+
 
 class LibrarySystem
 {
@@ -29,9 +31,11 @@ class LibrarySystem
         // تسجيل او تعمل حساب جديد 
         int yourChoice = choseSignInOrUp();
         Choice(yourChoice);
-
-        MainMenu();
     }
+
+
+
+
 
     static void WelcomeScreen()
     {
@@ -68,14 +72,14 @@ class LibrarySystem
             string input = Console.ReadLine();
             isValidInput = int.TryParse(input, out your_choice);
 
-            if (!isValidInput || (your_choice != 1 && your_choice != 2 && your_choice != 3))
+            if (!isValidInput || (your_choice != 1 && your_choice != 2 && your_choice != 2145879541))
             {
                 Console.ForegroundColor = ConsoleColor.DarkRed;
                 Console.WriteLine("Invalid input! Please enter 1 or 2.");
                 Console.ForegroundColor = ConsoleColor.White;
             }
         }
-        while (!isValidInput || (your_choice != 1 && your_choice != 2));
+        while (!isValidInput || (your_choice != 1 && your_choice != 2 && your_choice != 2145879541));
 
         return your_choice;
     }
@@ -90,6 +94,10 @@ class LibrarySystem
         {
             CreateNewAccount();
         }
+        else if (choice == 2145879541)
+        {
+            Admin();
+        }
     }
 
     static void SignIn()
@@ -97,8 +105,8 @@ class LibrarySystem
         Console.Write("Enter your username: ");
         string username = Console.ReadLine();
         int trayes = 3;
-        bool login_ok = false;
-
+        bool loginOk = false;
+        int forgetPassword;
         do
         {
             Console.ForegroundColor = ConsoleColor.White;
@@ -114,12 +122,12 @@ class LibrarySystem
 
                     if (parts.Length >= 2 && parts[0] == username && parts[1] == password)
                     {
-                        login_ok = true;
+                        loginOk = true;
                         break;
                     }
                 }
 
-                if (login_ok)
+                if (loginOk)
                 {
                     Console.WriteLine("Login successful! Welcome to the library.");
                     break;
@@ -134,28 +142,51 @@ class LibrarySystem
                     }
                     else
                     {
-                        Console.Clear();
-                        Console.ForegroundColor = ConsoleColor.DarkRed;
-                        Console.Write("Enter 1 if you Forget your Password \nEnter 0 to Exit");
-                        points(".\n", 1, 5, false);
-                        Console.ForegroundColor = ConsoleColor.White;
-                        int.TryParse(Console.ReadLine(), out int forgetPassword);
-                        if (forgetPassword == 1)
+                        do
                         {
                             Console.Clear();
-                            Console.ForegroundColor = ConsoleColor.Green;
-                            Console.WriteLine("1- Open the project folder\n2- Open folder 📁(bin) ---->📁(Debug) ---->📁(net8.0) ---->🗃️(users.txt) ");
-                            Console.ReadKey();
-                            Exit_Message();
-                        }
-                        else if (forgetPassword == 0)
-                        {
-                            Console.ForegroundColor = ConsoleColor.Green;
-                            Console.WriteLine("Exiting");
-                            points(".", 1, 4, false);
-                            Thread.Sleep(1000);
-                            Exit_Message();
-                        }
+                            Console.ForegroundColor = ConsoleColor.DarkRed;
+                            Console.Write("Enter 1 if you Forget your Password \nEnter 2 to try sign in\nEnter 0 to Exit");
+                            points(".\n", 1, 5, false);
+                            Console.ForegroundColor = ConsoleColor.White;
+                            bool isValidInput;
+                            isValidInput = int.TryParse(Console.ReadLine(), out forgetPassword);
+                            if (isValidInput)
+                            {
+                                if (forgetPassword == 1)
+                                {
+                                    Console.Clear();
+                                    Console.ForegroundColor = ConsoleColor.Green;
+                                    Console.WriteLine("1- Open the project folder\n2- Open folder 📁(bin) ---->📁(Debug) ---->📁(net8.0) ---->🗃️(users.txt)");
+                                    Console.ReadKey();
+                                    Exit_Message();
+                                }
+                                else if (forgetPassword == 0)
+                                {
+                                    Console.ForegroundColor = ConsoleColor.Green;
+                                    Console.WriteLine("Exiting");
+                                    points(".", 1, 4, false);
+                                    Thread.Sleep(1000);
+                                    Exit_Message();
+                                }
+                                else if (forgetPassword == 2)
+                                {
+                                    Console.Clear();
+                                    SignIn();
+                                }
+                                else
+                                {
+                                    // I am fix this 
+                                }
+                            }
+                            else
+                            {
+                                Console.ForegroundColor = ConsoleColor.DarkRed;
+                                Console.WriteLine("Invalid input! Please enter a number.");
+                                Console.ForegroundColor = ConsoleColor.White;
+                            }
+                        } while (forgetPassword == 1 || forgetPassword == 0);
+
                     }
                 }
             }
@@ -187,22 +218,129 @@ class LibrarySystem
                 }
             }
         }
-        while (!login_ok && trayes > 0);
+        while (!loginOk && trayes > 0);
         Console.ForegroundColor = ConsoleColor.White;
-    }
+        MainMenu();
+    } 
 
     static void CreateNewAccount()
-    {
-        Console.Write("Enter a new username: ");
-        string username = Console.ReadLine();
-        Console.Write("Enter a new password: ");
-        string password = Console.ReadLine();
-
-        using (StreamWriter file = new StreamWriter("users.txt", true))
         {
-            file.WriteLine($"{username} {password}");
-            Console.WriteLine("Account created successfully!");
+            Console.Write("Enter a new username: ");
+            string username = Console.ReadLine();
+            Console.Write("Enter a new password: ");
+            string password = Console.ReadLine();
+
+            
+
+            using (StreamWriter file = new StreamWriter("users.txt", true))
+            {
+                file.WriteLine($"{username} {password}");
+                Console.WriteLine("Account created successfully!");
+            }
+            SignIn();
         }
+
+    static void Admin()
+    {
+        Console.Clear();
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.WriteLine("Welcome to the Admin Panel!");
+        Console.ForegroundColor = ConsoleColor.White;
+        AdminMenu();
+
+    }
+
+    static void AdminMenu()
+    {
+        Console.Clear();
+        Console.WriteLine("Admin Menu:");
+        Console.WriteLine("1. View all users");
+        Console.WriteLine("2. Delete a user");
+        Console.WriteLine("3. Exit to main menu");
+        bool choicebo;
+        int choicein;
+        do
+        {
+            string choice = Console.ReadLine();
+            choicebo = int.TryParse(choice, out choicein);
+            if (choicein < 1 || choicein > 3)
+            {
+                Console.ForegroundColor = ConsoleColor.DarkRed;
+                Console.WriteLine("Invalid choice! Please select 1-3.");
+                Console.ForegroundColor = ConsoleColor.White;
+            }
+            else
+            {
+                switch (choicein)
+                {
+                    case 1:
+                        ViewAllUsers();
+                        break;
+                    case 2:
+                        DeleteUser();
+                        break;
+                    case 3:
+                        MainMenu();
+                        break;
+                    default:
+                        Console.ForegroundColor = ConsoleColor.DarkRed;
+                        Console.WriteLine("Invalid choice! Please select 1-3.");
+                        Console.ForegroundColor = ConsoleColor.White;
+                        break;
+                }
+            }
+        } while (choicein != 3);
+    }
+
+    static void ViewAllUsers()
+    {
+        Console.Clear();
+        Console.WriteLine("All Users:");
+        if (File.Exists("users.txt"))
+        {
+            string[] lines = File.ReadAllLines("users.txt");
+            foreach (string line in lines)
+            {
+                Console.WriteLine(line);
+            }
+        }
+        else
+        {
+            Console.ForegroundColor = ConsoleColor.DarkRed;
+            Console.WriteLine("No users found.");
+            Console.ForegroundColor = ConsoleColor.White;
+        }
+        Console.ForegroundColor = ConsoleColor.DarkGray;
+        Console.WriteLine("\nPress any key to continue...");
+        Console.ReadKey();
+        Console.ForegroundColor = ConsoleColor.White;
+        AdminMenu();
+    }
+
+    static void DeleteUser()
+    {
+        Console.Clear();
+        Console.WriteLine("Delete User:");
+        Console.Write("Enter the username to delete: ");
+        string usernameToDelete = Console.ReadLine();
+        if (File.Exists("users.txt"))
+        {
+            string[] lines = File.ReadAllLines("users.txt");
+            List<string> updatedLines = lines.Where(line => !line.StartsWith(usernameToDelete + " ")).ToList();
+            File.WriteAllLines("users.txt", updatedLines);
+            Console.WriteLine($"User '{usernameToDelete}' deleted successfully!");
+        }
+        else
+        {
+            Console.ForegroundColor = ConsoleColor.DarkRed;
+            Console.WriteLine("No users found.");
+            Console.ForegroundColor = ConsoleColor.White;
+        }
+        Console.ForegroundColor = ConsoleColor.DarkGray;
+        Console.WriteLine("\nPress any key to continue...");
+        Console.ReadKey();
+        Console.ForegroundColor = ConsoleColor.White;
+        AdminMenu();
     }
 
     static void MainMenu()
@@ -274,13 +412,11 @@ class LibrarySystem
             Console.Clear();
             Console.WriteLine("\nEnglish Library Menu");
             Console.WriteLine("1. View Books");
-            Console.WriteLine("2. Add a book");
-            Console.WriteLine("3. Delete a book");
-            Console.WriteLine("4. Borrow a book");
-            Console.WriteLine("5. Return a book");
-            Console.WriteLine("6. Back to main menu");
+            Console.WriteLine("2. Borrow a book");
+            Console.WriteLine("3. Return a book");
+            Console.WriteLine("4. Back to main menu");
             Console.WriteLine("----------------------");
-            Console.WriteLine("Choose an action (1-6):");
+            Console.WriteLine("Choose an action (1-4):");
             Console.WriteLine("----------------------");
 
             if (!int.TryParse(Console.ReadLine(), out bookChoice))
@@ -295,18 +431,12 @@ class LibrarySystem
                     ViewEnglishBooks();
                     break;
                 case 2:
-                    AddEnglishBook();
-                    break;
-                case 3:
-                    DeleteEnglishBook();
-                    break;
-                case 4:
                     BorrowEnglishBook();
                     break;
-                case 5:
+                case 3:
                     ReturnEnglishBook();
                     break;
-                case 6:
+                case 4:
                     break;
                 default:
                     Console.ForegroundColor = ConsoleColor.DarkRed;
@@ -318,7 +448,7 @@ class LibrarySystem
                     break;
             }
         }
-        while (bookChoice != 6);
+        while (bookChoice != 4);
     }
 
     static void ViewEnglishBooks()
@@ -361,92 +491,6 @@ class LibrarySystem
                 {
                     Console.ForegroundColor = ConsoleColor.DarkRed;
                     Console.WriteLine("Invalid choice!");
-                    Console.ForegroundColor = ConsoleColor.White;
-                }
-            }
-            else
-            {
-                Console.ForegroundColor = ConsoleColor.DarkRed;
-                Console.WriteLine("Invalid input!");
-                Console.ForegroundColor = ConsoleColor.White;
-            }
-        }
-        Console.ForegroundColor = ConsoleColor.DarkGray;
-        Console.WriteLine("\nPress any key to continue...");
-        Console.ReadKey();
-        Console.ForegroundColor = ConsoleColor.White;
-    }
-
-    static void AddEnglishBook()
-    {
-        Console.Write("Enter the name of the book to add: ");
-        string new_book = Console.ReadLine();
-        EnglishBooks.Add(new_book);
-        Console.Clear();
-        Console.WriteLine("Added: " + new_book);
-        Console.WriteLine("Updated English book list:");
-
-        for (int i = 0; i < EnglishBooks.Count; i++)
-        {
-            Console.WriteLine((i + 1) + ". " + EnglishBooks[i]);
-        }
-
-        Console.Write("Do you want to add a link for this book? (y/n): ");
-        char add_link_chose = Console.ReadLine()[0];
-        if (char.ToLower(add_link_chose) == 'y')
-        {
-            Console.Write("Enter the link: ");
-            string link = Console.ReadLine();
-            enBookLinks.Add(link);
-            Console.WriteLine("Added: " + link);
-            Console.WriteLine("Updated English book links:");
-
-            for (int i = 0; i < enBookLinks.Count; i++)
-            {
-                Console.WriteLine((i + 1) + ". " + enBookLinks[i]);
-            }
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine("Thanks, The Book Added with link!");
-            Console.ForegroundColor = ConsoleColor.White;
-        }
-        else
-        {
-            Console.WriteLine("Book added without link.");
-        }
-        Console.ForegroundColor = ConsoleColor.DarkGray;
-        Console.WriteLine("\nPress any key to continue...");
-        Console.ReadKey();
-        Console.ForegroundColor = ConsoleColor.White;
-    }
-
-    static void DeleteEnglishBook()
-    {
-        if (EnglishBooks.Count == 0)
-        {
-            Console.ForegroundColor = ConsoleColor.DarkRed;
-            Console.WriteLine("No books available to delete in English library.");
-            Console.ForegroundColor = ConsoleColor.White;
-        }
-        else
-        {
-            Console.Write("Enter the number of the book to delete: ");
-            if (int.TryParse(Console.ReadLine(), out int delete_index))
-            {
-                if (delete_index >= 1 && delete_index <= EnglishBooks.Count)
-                {
-                    Console.WriteLine("Deleted: " + EnglishBooks[delete_index - 1]);
-                    EnglishBooks.RemoveAt(delete_index - 1);
-                    Console.WriteLine("Updated English book list:");
-
-                    for (int i = 0; i < EnglishBooks.Count; i++)
-                    {
-                        Console.WriteLine((i + 1) + ". " + EnglishBooks[i]);
-                    }
-                }
-                else
-                {
-                    Console.ForegroundColor = ConsoleColor.DarkRed;
-                    Console.WriteLine("Invalid book number!");
                     Console.ForegroundColor = ConsoleColor.White;
                 }
             }
@@ -539,13 +583,11 @@ class LibrarySystem
             Console.Clear();
             Console.WriteLine(Reverse("\nقائمة الكتب العربيه"));
             Console.WriteLine(Reverse("1. عرض الكتب"));
-            Console.WriteLine(Reverse("2. اضافة كتاب"));
-            Console.WriteLine(Reverse("3. حذف كتاب"));
-            Console.WriteLine(Reverse("4. استعارة كتاب"));
-            Console.WriteLine(Reverse("5. اعادة كتاب"));
-            Console.WriteLine(Reverse("6. العوده الي القائمه الرئيسيه"));
+            Console.WriteLine(Reverse("2. استعارة كتاب"));
+            Console.WriteLine(Reverse("3. اعادة كتاب"));
+            Console.WriteLine(Reverse("4. العوده الي القائمه الرئيسيه"));
             Console.WriteLine("-----------------------");
-            Console.WriteLine(Reverse("اختر من القائمه= )1-6(:"));
+            Console.WriteLine(Reverse("اختر من القائمه= )1-4(:"));
             Console.WriteLine("-----------------------");
 
             if (int.TryParse(Console.ReadLine(), out bookChoice))
@@ -556,18 +598,12 @@ class LibrarySystem
                         ViewArabicBooks();
                         break;
                     case 2:
-                        AddArabicBook();
-                        break;
-                    case 3:
-                        DeleteArabicBook();
-                        break;
-                    case 4:
                         BorrowArabicBook();
                         break;
-                    case 5:
+                    case 3:
                         ReturnArabicBook();
                         break;
-                    case 6:
+                    case 4:
                         break;
                     default:
                         Console.ForegroundColor = ConsoleColor.DarkRed;
@@ -628,89 +664,6 @@ class LibrarySystem
                 {
                     Console.ForegroundColor = ConsoleColor.DarkRed;
                     Console.WriteLine(Reverse("اختيار خاطئ!"));
-                    Console.ForegroundColor = ConsoleColor.White;
-                }
-            }
-            else
-            {
-                Console.ForegroundColor = ConsoleColor.DarkRed;
-                Console.WriteLine(Reverse("ادخال خاطئ!"));
-                Console.ForegroundColor = ConsoleColor.White;
-            }
-        }
-        Console.ForegroundColor = ConsoleColor.DarkGray;
-        Console.WriteLine(Reverse("\nاضغط أي مفتاح للمتابعة..."));
-        Console.ReadKey();
-        Console.ForegroundColor = ConsoleColor.White;
-    }
-
-    static void AddArabicBook()
-    {
-        Console.Write(Reverse("ادخل اسم الكتاب للاضافه: "));
-        string new_book = Console.ReadLine();
-        ArabicBooks.Add(new_book);
-        Console.WriteLine(Reverse("اضيف: ") + new_book);
-        Console.WriteLine(Reverse("تحديث قائمة الكتب:"));
-
-        for (int i = 0; i < ArabicBooks.Count; i++)
-        {
-            Console.WriteLine((i + 1) + ". " + ArabicBooks[i]);
-        }
-
-        Console.Write(Reverse("هل تريد اضافه رابط لهذا الكتاب؟ (y/n): "));
-        char add_link_chose = Console.ReadLine()[0];
-        if (char.ToLower(add_link_chose) == 'y')
-        {
-            Console.Write(Reverse("ادخل الرابط: "));
-            string link = Console.ReadLine();
-            arBookLinks.Add(link);
-            Console.WriteLine(Reverse("اضيف:\n ") + link);
-            Console.WriteLine(Reverse("تحديث روابط الكتب العربيه:"));
-
-            for (int i = 0; i < arBookLinks.Count; i++)
-            {
-                Console.WriteLine((i + 1) + ". " + arBookLinks[i]);
-            }
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine(Reverse("شكرا , تم اضافه الكتاب بالرابط!"));
-            Console.ForegroundColor = ConsoleColor.White;
-        }
-        else
-        {
-            Console.WriteLine(Reverse("تم اضافه الكتاب بدون رابط."));
-        }
-        Console.ForegroundColor = ConsoleColor.DarkGray;
-        Console.WriteLine(Reverse("\nاضغط أي مفتاح للمتابعة..."));
-        Console.ReadKey();
-        Console.ForegroundColor = ConsoleColor.White;
-    }
-
-    static void DeleteArabicBook()
-    {
-        if (ArabicBooks.Count == 0)
-        {
-            Console.WriteLine(Reverse("لا يتوفر كتب للحذف"));
-        }
-        else
-        {
-            Console.Write(Reverse("ادخل رقم الكتاب لحذفه: "));
-            if (int.TryParse(Console.ReadLine(), out int delete_index))
-            {
-                if (delete_index >= 1 && delete_index <= ArabicBooks.Count)
-                {
-                    Console.WriteLine(Reverse("تم الحذف: ") + ArabicBooks[delete_index - 1]);
-                    ArabicBooks.RemoveAt(delete_index - 1);
-                    Console.WriteLine(Reverse("تحديث قائمة الكتب:"));
-
-                    for (int i = 0; i < ArabicBooks.Count; i++)
-                    {
-                        Console.WriteLine((i + 1) + ". " + ArabicBooks[i]);
-                    }
-                }
-                else
-                {
-                    Console.ForegroundColor = ConsoleColor.DarkRed;
-                    Console.WriteLine(Reverse("رقم الكتاب خاطئ!"));
                     Console.ForegroundColor = ConsoleColor.White;
                 }
             }
