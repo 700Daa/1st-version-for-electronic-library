@@ -26,7 +26,7 @@ class LibrarySystem
     static void Main()
     {
         Console.OutputEncoding = System.Text.Encoding.UTF8;
-        WelcomeScreen();
+        //WelcomeScreen();
 
         // تسجيل او تعمل حساب جديد 
         int yourChoice = choseSignInOrUp();
@@ -604,6 +604,7 @@ class LibrarySystem
                         ReturnArabicBook();
                         break;
                     case 4:
+                        MainMenu();
                         break;
                     default:
                         Console.ForegroundColor = ConsoleColor.DarkRed;
@@ -615,11 +616,11 @@ class LibrarySystem
             {
                 Console.ForegroundColor = ConsoleColor.DarkRed;
                 Console.WriteLine(Reverse("اختيار خاطئ!"));
+                Console.ForegroundColor = ConsoleColor.DarkGray;
+                Console.WriteLine(Reverse("\nاضغط أي مفتاح للمتابعة..."));
+                Console.ReadKey();
+                Console.ForegroundColor = ConsoleColor.White;
             }
-            Console.ForegroundColor = ConsoleColor.DarkGray;
-            Console.WriteLine(Reverse("\nاضغط أي مفتاح للمتابعة..."));
-            Console.ReadKey();
-            Console.ForegroundColor = ConsoleColor.White;
         }
         while (bookChoice != 6);
     }
@@ -682,13 +683,13 @@ class LibrarySystem
 
     static void BorrowArabicBook()
     {
-        Console.Write(Reverse("ادخل عدد الكتب: "));
+        Console.Write(Reverse(" ادخل عدد الكتب:"));
         if (int.TryParse(Console.ReadLine(), out int borrow_count))
         {
             if (borrow_count > 0)
             {
                 arBorrowedBooks += borrow_count;
-                Console.WriteLine(Reverse("تم استعارة  ") + borrow_count + Reverse(" كتب عربيه."));
+                Console.WriteLine(Reverse("تم استعارة  ") + borrow_count + Reverse(" تم استعارة."));
                 Console.WriteLine(Reverse("الكتب المستعاره الكليه ") + arBorrowedBooks);
             }
             else
